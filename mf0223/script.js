@@ -1,59 +1,69 @@
 const form = document.getElementById('form');
-const panelLista = document.getElementById('panel-lista');
+const listaComponentes = document.getElementById('lista-componentes');
 const API_URL = 'http://localhost:3000/productos';
 
-/* mostrar*/
+
+
+
+// Mostrar productos
 async function fetchProductos() {
     try {
         const res = await fetch(API_URL);
-        const productos = await res.json();
+        const productos = await res.json();  
+        //console.log('Productos cargados:', productos);
         mostrarProductos(productos);
     } catch (error) {
-        console.error('Error al mostrar los productos:', error);
+        console.error('Error al cargar los productos:', error);
+        listaComponentes.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: red;">Error al conectar con el servidor</p>';
     }
 }
 
-/* tarjetas */
+// Tarjetas
 function mostrarProductos(productos) {
-    panelLista.classList.add('updating');
-    panelLista.replaceChildren(); // limpiar antes
+    listaComponentes.innerHTML = '';  
+
+    if (productos.length === 0) {
+        listaComponentes.innerHTML = '<p style="grid-column: 1 / -1; text-align: center;">No hay servidores registrados aún.</p>';
+        return;
+    }
 
     productos.forEach(producto => {
         const tarjeta = document.createElement('div');
-
-        // Añadir clase 'tarjeta'
-       /*  const clases = ['tarjeta'];
-        if (alien.peligrosidad) clases.push(alien.peligrosidad);
-        tarjeta.classList.add(...clases); */
+        tarjeta.classList.add('tarjeta');
 
         tarjeta.innerHTML = `
-            <strong>${producto.nombre}</strong><br>
-            CPU: ${producto.cpu}<br>
-            RAM: ${producto.ram}
-            Almacenamiento: ${producto.almacenamiento}
-            <button data-id="${producto.nombre}">Eliminar</button>
+            <button class="btn-eliminar" data-id="${producto.id}">Eliminar</button>
+            <h4>${producto.nombre}</h4>
+            <p><strong>CPU:</strong> ${producto.cpu}</p>
+            <p><strong>RAM:</strong> ${producto.ram} GB</p>
+            <p><strong>Almacenamiento:</strong> ${producto.almacenamiento}</p>
         `;
 
-        // Evento para eliminar
-        tarjeta.querySelector('button').addEventListener('click', () => borrarAlien(producto.nombre));
+        //eliminar
+        tarjeta.querySelector('.btn-eliminar').addEventListener('click', () => {
+            borrarProducto(producto.id);
+        });
 
-        alienList.appendChild(tarjeta);
+        listaComponentes.appendChild(tarjeta);
     });
 }
 
-/* nuevo producto */
+// Guardar nuevo producto
 form.addEventListener('submit', async (e) => {
-    e.preventDefault(); // evitar recarga automatica
+    e.preventDefault();
 
-    const nombre = document.getElementById('nombre').value.trim();
+    // Limpiar mensajes de error anteriores
+    const mensajeErrorExistente = document.querySelector('.mensaje-error');
+    if (mensajeErrorExistente) {
+        mensajeErrorExistente.remove();
+    }
+
+    const nombre = document.getElementById('servidor').value.trim();
     const cpu = document.getElementById('cpu').value.trim();
-    const ram = document.getElementById('ram').value;
-    const almacenamiento = document.getElementById('almacenamiento').value;
+    const ram = Number(document.getElementById('ram').value);
+    const almacenamiento = document.getElementById('almacenamiento').value.trim();
 
-    
-   
-
-    const newProducto = { id, nombre, cpu, ram, almacenamiento };
+    const newProducto = { nombre, cpu, ram, almacenamiento };
 
     try {
         await fetch(API_URL, {
@@ -62,24 +72,46 @@ form.addEventListener('submit', async (e) => {
             body: JSON.stringify(newProducto)
         });
 
-        form.reset(); // limpiar formulario
-        fetchProductos(); //actualizar
+        form.reset();
+        fetchProductos();  
     } catch (error) {
-        console.error('Error al registrar el producto:', error);
+        console.error('Error al guardar:', error);
+        mostrarMensajeError('Error al conectar con el servidor. Verifica que json-server esté corriendo.');
     }
 });
 
+// Mostrar mensaje de error
+function mostrarMensajeError(texto) {
+    // Eliminar mensaje anterior si existe
+    const anterior = document.querySelector('.mensaje-error');
+    if (anterior) anterior.remove();
 
-/* eliminar */
-async function borrarProducto(nombre) {
+    const tarjetaError = document.createElement('div');
+    tarjetaError.classList.add('tarjeta', 'mensaje-error');
+    tarjetaError.style.backgroundColor = '#ffebee';
+    tarjetaError.style.borderLeft = '5px solid #e74c3c';
+    tarjetaError.innerHTML = `
+        <p style="color: #c0392b; font-weight: bold; margin: 0;">
+            ${texto}
+        </p>
+    `;
+
+    // Insertar al principio de la lista
+    listaComponentes.prepend(tarjetaError);
+
+    
+}
+
+// Eliminar servidor
+async function borrarProducto(id) {
+    /* if (!confirm('¿Seguro que quieres eliminar este servidor?')) return; */
+
     try {
-        await fetch(`${API_URL}/${nombre}`, { method: 'DELETE' });
-        fetchProductos(); 
+        await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        fetchProductos();  
     } catch (error) {
         console.error('Error al eliminar:', error);
     }
 }
-
-
 
 fetchProductos();
