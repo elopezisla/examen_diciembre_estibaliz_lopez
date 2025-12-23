@@ -20,10 +20,10 @@ async function fetchProductos() {
 
 // Tarjetas
 function mostrarProductos(productos) {
-    listaComponentes.innerHTML = '';  
+    listaComponentes.innerHTML = '';
 
     if (productos.length === 0) {
-        listaComponentes.innerHTML = '<p style="grid-column: 1 / -1; text-align: center;">No hay servidores registrados aún.</p>';
+        listaComponentes.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #777;">No hay servidores registrados aún.</p>';
         return;
     }
 
@@ -31,15 +31,25 @@ function mostrarProductos(productos) {
         const tarjeta = document.createElement('div');
         tarjeta.classList.add('tarjeta');
 
+        // Calcular total
+        const total = producto.totalPresupuesto || 
+                      (Number(producto.precioServidor) + 
+                       Number(producto.precioCpu) + 
+                       Number(producto.precioRam) + 
+                       Number(producto.precioAlmacenamiento));
+
         tarjeta.innerHTML = `
+            
+            <h4>${producto.nombre || 'Sin nombre'}</h4>
+            <p><strong>CPU:</strong> ${producto.cpu || 'No especificado'} <span style="color: #2980b9;">(${producto.precioCpu || 0}€)</span></p>
+            <p><strong>RAM:</strong> ${producto.ram || 0} GB <span style="color: #2980b9;">(${producto.precioRam || 0}€)</span></p>
+            <p><strong>Almacenamiento:</strong> ${producto.almacenamiento || 'No especificado'} <span style="color: #2980b9;">(${producto.precioAlmacenamiento || 0}€)</span></p>
+            <p><strong>Precio base servidor:</strong> ${producto.precioServidor || 0}€</p>
+            <p style="font-size: 1.3rem; font-weight: bold;">Total: ${total}€</p>
             <button class="btn-eliminar" data-id="${producto.id}">Eliminar</button>
-            <h4>${producto.nombre}</h4>
-            <p><strong>CPU:</strong> ${producto.cpu}</p>
-            <p><strong>RAM:</strong> ${producto.ram} GB</p>
-            <p><strong>Almacenamiento:</strong> ${producto.almacenamiento}</p>
         `;
 
-        //eliminar
+        // Botón eliminar
         tarjeta.querySelector('.btn-eliminar').addEventListener('click', () => {
             borrarProducto(producto.id);
         });
@@ -52,60 +62,69 @@ function mostrarProductos(productos) {
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Limpiar mensajes de error anteriores
     const mensajeErrorExistente = document.querySelector('.mensaje-error');
     if (mensajeErrorExistente) {
         mensajeErrorExistente.remove();
     }
 
+    // Obtener valores
     const nombre = document.getElementById('servidor').value.trim();
+    const precioServidor = Number(document.getElementById('precio-servidor').value);
     const cpu = document.getElementById('cpu').value.trim();
+    const precioCpu = Number(document.getElementById('precio-cpu').value);
     const ram = Number(document.getElementById('ram').value);
+    const precioRam = Number(document.getElementById('precio-ram').value);
     const almacenamiento = document.getElementById('almacenamiento').value.trim();
+    const precioAlmacenamiento = Number(document.getElementById('precio-almacenamiento').value);
 
-    const newProducto = { nombre, cpu, ram, almacenamiento };
+
+    // Calcular total
+    const total = precioServidor + precioCpu + precioRam + precioAlmacenamiento;
+
+    // Validación límite 700€
+    if (total > 700) {
+        mostrarMensajeError(`Presupuesto excedido. Máximo permitido 700€.`);
+        return;
+    }
+
+    // Objeto a guardar
+    const newProducto = { nombre, cpu, ram, almacenamiento, precioServidor, precioCpu, precioRam, precioAlmacenamiento, totalPresupuesto: total };
 
     try {
-        await fetch(API_URL, {
+        const response = await fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newProducto)
         });
 
+        if (!response.ok) throw new Error('Error del servidor');
+
         form.reset();
-        fetchProductos();  
+        fetchProductos();
     } catch (error) {
         console.error('Error al guardar:', error);
-        mostrarMensajeError('Error al conectar con el servidor. Verifica que json-server esté corriendo.');
+        mostrarMensajeError('Error al conectar con el servidor. ¿Está json-server ejecutándose?');
     }
 });
 
 // Mostrar mensaje de error
 function mostrarMensajeError(texto) {
-    // Eliminar mensaje anterior si existe
     const anterior = document.querySelector('.mensaje-error');
     if (anterior) anterior.remove();
 
-    const tarjetaError = document.createElement('div');
-    tarjetaError.classList.add('tarjeta', 'mensaje-error');
-    tarjetaError.style.backgroundColor = '#ffebee';
-    tarjetaError.style.borderLeft = '5px solid #e74c3c';
-    tarjetaError.innerHTML = `
-        <p style="color: #c0392b; font-weight: bold; margin: 0;">
-            ${texto}
-        </p>
-    `;
-
-    // Insertar al principio de la lista
-    listaComponentes.prepend(tarjetaError);
-
+    const mensaje = document.createElement('div');
+    mensaje.classList.add('mensaje-error');
+    mensaje.textContent = texto;  
+    mensaje.style.color = 'red';
+    mensaje.style.textAlign = 'center';
+    mensaje.style.marginTop = '1rem';
     
+    const boton = form.querySelector('button[type="submit"]');
+    boton.insertAdjacentElement('afterend', mensaje);
 }
 
-// Eliminar servidor
+// Eliminar producto
 async function borrarProducto(id) {
-    /* if (!confirm('¿Seguro que quieres eliminar este servidor?')) return; */
-
     try {
         await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
         fetchProductos();  
