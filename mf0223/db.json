@@ -1,24 +1,28 @@
 {
   "productos": [
     {
+      "id": 1,
       "nombre": "Cyber Cedar",
       "cpu": "AMD Ryzen 5 3600 3.6 GHz 6-Core Processor",
       "ram": "G.Skill Aegis 16 GB (2 x 8 GB) DDR4-3000 CL16 Memory",
       "almacenamiento": "Crucial P3 Plus 1 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive"
     },
     {
+      "id": 2,
       "nombre": "Server Peak",
       "cpu": "AMD Ryzen 4 3400 3.6 GHz 6-Core Processor",
       "ram": "G.Skill Trident Z5 Neo RGB DDR5 6000MHz 32GB 2x16GB CL30",
       "almacenamiento": "Disco duro SSD interno 1 TB - Crucial E100 PCIe Gen4 2280 NVME M.2"
     },
     {
+      "id": 3,
       "nombre": "Node Ninja",
       "cpu": "AMD Ryzen 6 4300 3.6 GHz 6-Core Processor",
       "ram": "G.Skill Ripjaws V DDR4 3200 PC4-25600 16GB 2x8GB CL16",
       "almacenamiento": "Disco Duro Crucial P510 1TB M.2 NVMe PCIe Gen5 11000MB/s Black Gaming"
     },
     {
+      "id": 4,
       "nombre": "Name Burst",
       "cpu": "AMD Ryzen 3 3600 3.6 GHz 5-Core Processor",
       "ram": "G.Skill Trident Z5 Royal Neo F5-6000J3036G32GX2-TR5NS 64GB 2x32GB DDR5 6000MHz CL30 AMD",
