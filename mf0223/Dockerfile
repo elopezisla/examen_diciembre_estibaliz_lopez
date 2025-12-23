@@ -1,11 +1,9 @@
-FROM node:18-alpine
+FROM nginx:alpine
 
-WORKDIR /app
+# Crear carpeta /mf0223 y copiar archivos ahí
+COPY index.html /usr/share/nginx/html/
+COPY styles.css /usr/share/nginx/html/
+COPY script.js /usr/share/nginx/html/
 
-RUN npm install -g json-server
+EXPOSE 80
 
-COPY db.json .
-
-EXPOSE 3000
-
-CMD ["json-server", "--watch", "db.json", "--host", "0.0.0.0", "--port", "3000"]
