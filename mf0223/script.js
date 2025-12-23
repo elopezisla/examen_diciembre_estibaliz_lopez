@@ -1,7 +1,7 @@
 const form = document.getElementById('form');
 const listaComponentes = document.getElementById('lista-componentes');
-const API_URL = 'http://localhost:3000/productos';
-
+/* const API_URL = 'http://localhost:3000/productos'; */
+const API_URL = 'http://api:3000/productos';
 
 
 
