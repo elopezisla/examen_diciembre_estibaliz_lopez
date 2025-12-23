@@ -1,6 +1,6 @@
 const form = document.getElementById('form');
 const listaComponentes = document.getElementById('lista-componentes');
-const API_URL = 'http://localhost:3000/productos';
+const API_URL = 'https://694a4fd31282f890d2d8461b.mockapi.io/api/productos';
 /* const API_URL = 'http://api:3000/productos'; */
 
 
