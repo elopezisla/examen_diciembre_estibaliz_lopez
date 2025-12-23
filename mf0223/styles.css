@@ -1,82 +1,102 @@
+/* RESETEO GLOBAL*/
+* {
+    box-sizing: border-box;
+}
+
 body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f4f8;
-            margin: 2rem;
-            color: #333;
-        }
-        h1, h3 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        form {
-            max-width: 600px;
-            margin: 2rem auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        label {
-            display: block;
-            margin-top: 1rem;
-            font-weight: bold;
-        }
-        input {
-            width: 100%;
-            padding: 0.8rem;
-            margin-top: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-        button[type="submit"] {
-            margin-top: 2rem;
-            width: 100%;
-            padding: 1rem;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            cursor: pointer;
-        }
-        button[type="submit"]:hover {
-            background-color: #2980b9;
-        }
-        .panel-tarjetas {
-            max-width: 1200px;
-            margin: 2rem auto;
-        }
-        .panel-lista {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1rem;
-        }
-        .tarjeta {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            position: relative;
-        }
-        .tarjeta h4 {
-            margin: 0 0 1rem 0;
-            color: #2c3e50;
-            font-size: 1.4rem;
-        }
-        .btn-eliminar {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 0.5rem 0.8rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        .btn-eliminar:hover {
-            background: #c0392b;
-        }
+    background-color: #f0f4f8;
+    margin: 2rem;
+}
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    font-weight: bold;
+}
+h3 {
+    color: #2c3e50;
+}
+
+form {
+    width: 40%;
+    max-width: 500px;            
+    min-width: 350px;
+    margin: 2rem auto;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+label {
+    display: block;
+    margin-top: 1rem;          
+    margin-bottom: 0.1rem;
+    font-weight: bold;
+}
+input {
+    width: 100%;
+    padding: 0.8rem;
+    
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+button[type="submit"] {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: white;
+    color: rgb(40, 71, 248);
+    border: 2px solid rgb(40, 71, 248);
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+button[type="submit"]:hover {
+    background-color: rgb(19, 39, 150);
+    color: white;
+}
+
+.panel-tarjetas {
+    max-width: 1200px;
+    margin: 2rem auto;
+}
+
+.panel-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.tarjeta {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.tarjeta h4 {
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+    font-size: 1.4rem;
+}
+
+.btn-eliminar {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-eliminar:hover {
+    background: #c0392b;
+}
